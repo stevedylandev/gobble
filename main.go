@@ -6,9 +6,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"time"
 	"syscall"
-	"runtime"
+	"time"
 )
 
 // Gobble: fetch in go for fun
@@ -22,25 +21,20 @@ import (
 // Packages - /lib/apk/db/installed count P:
 // Shell - env
 // Terminal?
-// Uptime syscall.Sysinfo()
+// Uptime - Done
 // CPU - /proc/cpuinfo
-// GPU - 
-// Memory - Done 
+// GPU -
+// Memory - Done
 //
 // Need to figure out colors and printing design
 
 func main() {
-	hostname, err := os.Hostname()
+	hostname, err := getHostname()
 	if err != nil {
-		fmt.Printf("Error fetching hostname: %s", err)
+		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	user := os.Getenv("USER")
-	if user == "" {
-		fmt.Printf("Error fetching User: %s", err)
-		os.Exit(1)
-	}
-	fmt.Printf("%s@%s\n", user ,hostname)
+	fmt.Println(hostname)
 	fmt.Println("-----------------------------")
 	distro, err := getDistro()
 	if err != nil {
@@ -62,14 +56,19 @@ func main() {
 	}
 	fmt.Println("Uptime: ", uptime)
 
-	fmt.Println("------------TEST--------")
-	var si syscall.Sysinfo_t
-	syscall.Sysinfo(&si)
-	fmt.Println(si.Uptime)
-	fmt.Println(runtime.GOARCH)
-
-
 	os.Exit(0)
+}
+
+func getHostname() (string, error) {
+	hostname, err := os.Hostname()
+	if err != nil {
+		return "", err
+	}
+	user := os.Getenv("USER")
+	if user == "" {
+		return "", err
+	}
+	return fmt.Sprintf("%s@%s\n", user, hostname), nil
 }
 
 func getDistro() (string, error) {
@@ -133,18 +132,10 @@ func getMemory() (string, error) {
 }
 
 func getUptime() (string, error) {
-	content, err := os.ReadFile("/proc/uptime")
-	if err != nil {
-		return "", err
-	}
+	var si syscall.Sysinfo_t
+	syscall.Sysinfo(&si)
 
-	fields := strings.Fields(string(content))
-	uptimeSeconds, err := strconv.ParseFloat(fields[0], 64)
-	if err != nil {
-		return "", err
-	}
-
-	uptime := time.Duration(uptimeSeconds * float64(time.Second))
+	uptime := time.Duration(float64(si.Uptime) * float64(time.Second))
 
 	hours := int(uptime.Hours())
 	minutes := int(uptime.Minutes()) % 60
