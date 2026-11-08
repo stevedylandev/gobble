@@ -31,25 +31,37 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Printf(hostname)
+
 	fmt.Println("-----------------------------")
+
 	machine, err := internal.GetMachine()
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
 	fmt.Println("Machine: ", machine)
+
 	kernel, err := internal.GetKernel()
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
 	fmt.Println("Kernel: ", kernel)
+
 	distro, err := internal.GetDistro()
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
 	fmt.Println("Disto: ", distro)
+
+	packages, err := internal.GetPackages()
+	if err != nil {
+		fmt.Println("error:", err)
+		os.Exit(1)
+	}
+	fmt.Println("Packages: ", packages, "(apk)")
+
 	memory, err := internal.GetMemory()
 	if err != nil {
 		fmt.Println("error:", err)

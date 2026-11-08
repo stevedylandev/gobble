@@ -52,8 +52,8 @@ func GetMachine() (string, error) {
 
 	brand := strings.TrimSpace(string(brandFile))
 	product := strings.TrimSpace(string(productFile))
-	
- return fmt.Sprintf("%s %s", brand, product), nil
+
+	return fmt.Sprintf("%s %s", brand, product), nil
 }
 
 func GetKernel() (string, error) {
@@ -63,6 +63,26 @@ func GetKernel() (string, error) {
 	}
 	kernel := strings.TrimSpace(string(kernelFile))
 	return kernel, nil
+}
+
+func GetPackages() (int, error) {
+	// Packages - /lib/apk/db/installed count P:
+	var count int
+	file, err := os.Open("/lib/apk/db/installed")
+	if err != nil {
+		return 0, err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "P:") {
+			count++
+		}
+	}
+
+	return count, nil
 }
 
 func GetMemory() (string, error) {
