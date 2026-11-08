@@ -30,8 +30,7 @@ func main() {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	fmt.Printf(hostname)
-
+	internal.TypePrint(hostname)
 	fmt.Println("-----------------------------")
 
 	machine, err := internal.GetMachine()
@@ -39,56 +38,56 @@ func main() {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("Machine: ", machine)
+	internal.TypePrint("Machine: " + machine)
 
 	kernel, err := internal.GetKernel()
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("Kernel: ", kernel)
+	internal.TypePrint("Kernel: " + kernel)
 
 	distro, err := internal.GetDistro()
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("Disto: ", distro)
+	internal.TypePrint("Disto: " + distro)
 
 	packages, err := internal.GetPackages()
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("Packages: ", packages, "(apk)")
+	internal.TypePrint("Packages: " + packages + " (apk)")
 
 	shell, err := internal.GetShell()
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("Shell: ", shell)
+	internal.TypePrint("Shell: " + shell)
 
 	cpu, err := internal.GetCpu()
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("CPU: ", cpu)
+	internal.TypePrint("CPU: " + cpu)
 
 	memory, err := internal.GetMemory()
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("Memory: ", memory)
+	internal.TypePrint("Memory: " + memory)
 
 	uptime, err := internal.GetUptime()
 	if err != nil {
 		fmt.Println("error:", err)
 		os.Exit(1)
 	}
-	fmt.Println("Uptime: ", uptime)
+	internal.TypePrint("Uptime: " + uptime)
 
 	os.Exit(0)
 }

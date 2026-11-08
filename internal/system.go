@@ -1,4 +1,4 @@
-package helpers
+package internal
 
 import (
 	"bufio"
@@ -67,12 +67,12 @@ func GetKernel() (string, error) {
 	return kernel, nil
 }
 
-func GetPackages() (int, error) {
+func GetPackages() (string, error) {
 	// Packages - /lib/apk/db/installed count P:
 	var count int
 	file, err := os.Open("/lib/apk/db/installed")
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 	defer file.Close()
 
@@ -84,7 +84,9 @@ func GetPackages() (int, error) {
 		}
 	}
 
-	return count, nil
+	stringCount := strconv.Itoa(count)
+
+	return stringCount, nil
 }
 
 func GetShell() (string, error) {
