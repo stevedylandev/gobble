@@ -56,6 +56,15 @@ func GetMachine() (string, error) {
  return fmt.Sprintf("%s %s", brand, product), nil
 }
 
+func GetKernel() (string, error) {
+	kernelFile, err := os.ReadFile("/proc/sys/kernel/osrelease")
+	if err != nil {
+		return "", err
+	}
+	kernel := strings.TrimSpace(string(kernelFile))
+	return kernel, nil
+}
+
 func GetMemory() (string, error) {
 	var memTotal string
 	var memAvailable string

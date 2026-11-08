@@ -12,7 +12,7 @@ import (
 // Order:
 // Host - Done
 // Machine - Done
-// Kernal - /proc/sys/kernal/osrelease
+// Kernel - Done
 // Distro - Done
 // Packages - /lib/apk/db/installed count P:
 // Shell - env
@@ -38,6 +38,12 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println("Machine: ", machine)
+	kernel, err := internal.GetKernel()
+	if err != nil {
+		fmt.Println("error:", err)
+		os.Exit(1)
+	}
+	fmt.Println("Kernel: ", kernel)
 	distro, err := internal.GetDistro()
 	if err != nil {
 		fmt.Println("error:", err)
