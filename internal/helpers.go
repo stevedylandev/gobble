@@ -98,6 +98,26 @@ func GetShell() (string, error) {
 	return shell, nil
 }
 
+func GetCpu() (string, error) {
+	file, err := os.Open("/proc/cpuinfo")
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "model name") {
+			value := strings.TrimPrefix(line, "model name")
+			cleanSpace := strings.TrimSpace(value)
+			valueClean := strings.TrimPrefix(cleanSpace, ":")
+			return valueClean, nil
+		}
+	}
+	return "", nil
+}
+
 func GetMemory() (string, error) {
 	var memTotal string
 	var memAvailable string

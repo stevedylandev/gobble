@@ -15,10 +15,10 @@ import (
 // Kernel - Done
 // Distro - Done
 // Packages - Done
-// Shell - env
+// Shell - Done
 // Terminal?
 // Uptime - Done
-// CPU - /proc/cpuinfo
+// CPU - Done
 // GPU -
 // Memory - Done
 //
@@ -68,6 +68,13 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println("Shell: ", shell)
+
+	cpu, err := internal.GetCpu()
+	if err != nil {
+		fmt.Println("error:", err)
+		os.Exit(1)
+	}
+	fmt.Println("CPU: ", cpu)
 
 	memory, err := internal.GetMemory()
 	if err != nil {
