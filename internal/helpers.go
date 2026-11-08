@@ -8,6 +8,8 @@ import (
 	"strings"
 	"syscall"
 	"time"
+	"path/filepath"
+	"errors"
 )
 
 func GetHostname() (string, error) {
@@ -83,6 +85,17 @@ func GetPackages() (int, error) {
 	}
 
 	return count, nil
+}
+
+func GetShell() (string, error) {
+	shellEnv := os.Getenv("SHELL")
+	if shellEnv == "" {
+		return "", errors.New("Could not fetch shell")
+	}
+
+	shell := filepath.Base(shellEnv)
+
+	return shell, nil
 }
 
 func GetMemory() (string, error) {

@@ -14,7 +14,7 @@ import (
 // Machine - Done
 // Kernel - Done
 // Distro - Done
-// Packages - /lib/apk/db/installed count P:
+// Packages - Done
 // Shell - env
 // Terminal?
 // Uptime - Done
@@ -61,6 +61,13 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println("Packages: ", packages, "(apk)")
+
+	shell, err := internal.GetShell()
+	if err != nil {
+		fmt.Println("error:", err)
+		os.Exit(1)
+	}
+	fmt.Println("Shell: ", shell)
 
 	memory, err := internal.GetMemory()
 	if err != nil {
