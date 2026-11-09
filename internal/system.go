@@ -9,25 +9,25 @@ import (
 	"syscall"
 	"time"
 	"path/filepath"
-	"errors"
 )
 
-func GetHostname() (string, error) {
+func GetHostname() Row {
 	hostname, err := os.Hostname()
 	if err != nil {
-		return "", err
+		hostname = "Unknown"
 	}
 	user := os.Getenv("USER")
 	if user == "" {
-		return "", err
+		user = "Unknown"
 	}
-	return fmt.Sprintf("%s@%s\n", user, hostname), nil
+	host := fmt.Sprintf("%s@%s", user, hostname)
+	return Row{Key: "Host", Value: host}
 }
 
-func GetDistro() (string, error) {
+func GetDistro() string {
 	file, err := os.Open("/etc/os-release")
 	if err != nil {
-		return "", err
+		return ""
 	}
 	defer file.Close()
 
@@ -36,43 +36,42 @@ func GetDistro() (string, error) {
 		line := scanner.Text()
 		if strings.HasPrefix(line, "PRETTY_NAME=") {
 			value := strings.TrimPrefix(line, "PRETTY_NAME=")
-			return strings.Trim(value, `"`), nil
+			return strings.Trim(value, `"`)
 		}
 	}
-	return "", scanner.Err()
+	return ""
 }
 
-func GetMachine() (string, error) {
+func GetMachine() string {
 	brandFile, err := os.ReadFile("/sys/class/dmi/id/sys_vendor")
 	if err != nil {
-		return "", err
+		return ""
 	}
 	productFile, err := os.ReadFile("/sys/class/dmi/id/product_name")
 	if err != nil {
-		return "", err
+		return ""
 	}
 
 	brand := strings.TrimSpace(string(brandFile))
 	product := strings.TrimSpace(string(productFile))
 
-	return fmt.Sprintf("%s %s", brand, product), nil
+	return fmt.Sprintf("%s %s", brand, product)
 }
 
-func GetKernel() (string, error) {
+func GetKernel() string {
 	kernelFile, err := os.ReadFile("/proc/sys/kernel/osrelease")
 	if err != nil {
-		return "", err
+		return ""
 	}
 	kernel := strings.TrimSpace(string(kernelFile))
-	return kernel, nil
+	return kernel
 }
 
-func GetPackages() (string, error) {
-	// Packages - /lib/apk/db/installed count P:
+func GetPackages() string {
 	var count int
 	file, err := os.Open("/lib/apk/db/installed")
 	if err != nil {
-		return "", err
+		return ""
 	}
 	defer file.Close()
 
@@ -86,24 +85,24 @@ func GetPackages() (string, error) {
 
 	stringCount := strconv.Itoa(count)
 
-	return stringCount, nil
+	return stringCount + " (apk)"
 }
 
-func GetShell() (string, error) {
+func GetShell() string {
 	shellEnv := os.Getenv("SHELL")
 	if shellEnv == "" {
-		return "", errors.New("Could not fetch shell")
+		return ""
 	}
 
 	shell := filepath.Base(shellEnv)
 
-	return shell, nil
+	return shell
 }
 
-func GetCpu() (string, error) {
+func GetCpu() string {
 	file, err := os.Open("/proc/cpuinfo")
 	if err != nil {
-		return "", err
+		return ""
 	}
 	defer file.Close()
 
@@ -113,19 +112,19 @@ func GetCpu() (string, error) {
 		if strings.HasPrefix(line, "model name") {
 			value := strings.TrimPrefix(line, "model name")
 			cleanSpace := strings.TrimSpace(value)
-			valueClean := strings.TrimPrefix(cleanSpace, ":")
-			return valueClean, nil
+			valueClean := strings.TrimPrefix(cleanSpace, ": ")
+			return valueClean
 		}
 	}
-	return "", nil
+	return ""
 }
 
-func GetMemory() (string, error) {
+func GetMemory() string {
 	var memTotal string
 	var memAvailable string
 	file, err := os.Open("/proc/meminfo")
 	if err != nil {
-		return "", err
+		return ""
 	}
 	defer file.Close()
 
@@ -158,11 +157,11 @@ func GetMemory() (string, error) {
 	memAvailableGb := float64(memAvailableInt) / float64(1024) / float64(1024)
 	memUsed := memTotalGb - memAvailableGb
 
-	result := fmt.Sprintf("%.2f Gb / %.2f Gb", memUsed, memTotalGb)
-	return result, scanner.Err()
+	result := fmt.Sprintf("%.2f GiB / %.2f GiB", memUsed, memTotalGb)
+	return result
 }
 
-func GetUptime() (string, error) {
+func GetUptime() string {
 	var si syscall.Sysinfo_t
 	syscall.Sysinfo(&si)
 
@@ -171,5 +170,5 @@ func GetUptime() (string, error) {
 	hours := int(uptime.Hours())
 	minutes := int(uptime.Minutes()) % 60
 
-	return fmt.Sprintf("%d hours, %d mins", hours, minutes), nil
+	return fmt.Sprintf("%d hours, %d mins", hours, minutes)
 }
