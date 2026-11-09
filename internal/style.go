@@ -2,22 +2,35 @@ package internal
 
 import (
 	"fmt"
-	"math/rand"
-	"time"
 )
 
 const (
-	Reset = "\033[0m"
-	Bold  = "\033[1m"
-	Red   = "\033[31m"
-	Green = "\033[32m"
-	Blue  = "\033[34m"
-	Cyan  = "\033[36m"
+    Reset   = "\033[0m"
+    Bold    = "\033[1m"
+    Red     = "\033[31m"
+    Green   = "\033[32m"
+    Yellow  = "\033[33m"
+    Blue    = "\033[34m"
+    Magenta = "\033[35m"
+    Cyan    = "\033[36m"
+    White   = "\033[37m"
+    Gray    = "\033[90m"
 )
 
-type Row struct {
-	Key   string
-	Value string
+type Color struct {
+    Name string
+    Code string
+}
+
+var Palette = []Color{
+    {"Red", Red},
+    {"Green", Green},
+    {"Yellow", Yellow},
+    {"Blue", Blue},
+    {"Magenta", Magenta},
+    {"Cyan", Cyan},
+    {"White", White},
+    {"Gray", Gray},
 }
 
 func Colorize(color, s string) string {
@@ -29,7 +42,7 @@ func PrintRows(rows []Row) {
 
 	fmt.Println()
 	for _, row := range rows {
-		label := Colorize(Bold+Green, fmt.Sprintf("%-*s", width, row.Key))
+		label := Colorize(Bold+Yellow, fmt.Sprintf("%-*s", width, row.Key))
 		line := "  " + label + "    " + row.Value
 
 		fmt.Println(line)
@@ -45,4 +58,13 @@ func labelWidth(rows []Row) int {
 		}
 	}
 	return width
+}
+
+func PrintPalette() {
+		fmt.Print("  ")
+    for _, c := range Palette {
+        swatch := Colorize(c.Code, "●  ")
+				fmt.Print(swatch)
+    }
+		fmt.Println()
 }

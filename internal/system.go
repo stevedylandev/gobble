@@ -4,12 +4,17 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"syscall"
 	"time"
-	"path/filepath"
 )
+
+type Row struct {
+	Key   string
+	Value string
+}
 
 func GetHostname() Row {
 	hostname, err := os.Hostname()
@@ -93,6 +98,15 @@ func GetPackages() Row {
 	return Row{Key: "Packages", Value: packages}
 }
 
+func GetDe() Row {
+	var de string
+	de = os.Getenv("DESKTOP_SESSION")
+	if de == "" {
+		de = "Unknown"
+	}
+	return Row{Key: "DE", Value: de}
+}
+
 func GetShell() Row {
 	var shell string
 	shellEnv := os.Getenv("SHELL")
@@ -122,7 +136,7 @@ func GetCpu() Row {
 			cpu = strings.TrimPrefix(cleanSpace, ": ")
 		}
 	}
-	return Row{Key: "CPU", Value:  cpu}
+	return Row{Key: "CPU", Value: cpu}
 }
 
 func GetMemory() Row {
@@ -175,9 +189,14 @@ func GetUptime() Row {
 
 	uptimeValues := time.Duration(float64(si.Uptime) * float64(time.Second))
 
-	hours := int(uptimeValues.Hours())
+	days := int(uptimeValues.Hours() / 24)
+	hours := int(uptimeValues.Hours()) % 24
 	minutes := int(uptimeValues.Minutes()) % 60
 
-	uptime = fmt.Sprintf("%d hours, %d mins", hours, minutes)
+	if days > 0 {
+		uptime = fmt.Sprintf("%d days, %d hours, %d mins", days, hours, minutes)
+	} else {
+		uptime = fmt.Sprintf("%d hours, %d mins", hours, minutes)
+	}
 	return Row{Key: "Uptime", Value: uptime}
 }
