@@ -9,7 +9,7 @@ A simple systems fetch in ~300 lines of Go with no dependencies
 1. Make sure Go and Git are installed
 
 ```bash
-go --version
+go version
 git --version
 ```
 
