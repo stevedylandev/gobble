@@ -12,12 +12,14 @@ func main() {
 		system.GetMachine(),
 		system.GetKernel(),
 		system.GetDistro(),
+		// DE
 		system.GetPackages(),
 		system.GetShell(),
 		system.GetCpu(),
 		system.GetMemory(),
 		system.GetUptime(),
+		// Colors
 	}
-	system.PrintRows(rows, false)
+	system.PrintRows(rows)
 }
 

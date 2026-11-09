@@ -24,20 +24,17 @@ func Colorize(color, s string) string {
 	return color + s + Reset
 }
 
-func PrintRows(rows []Row, typewriter bool) {
+func PrintRows(rows []Row) {
 	width := labelWidth(rows)
 
+	fmt.Println()
 	for _, row := range rows {
 		label := Colorize(Bold+Green, fmt.Sprintf("%-*s", width, row.Key))
-		line := label + " " + row.Value
+		line := "  " + label + "    " + row.Value
 
-		if typewriter {
-			TypeString(line)
-			fmt.Println() 
-		} else {
-			fmt.Println(line)
-		}
+		fmt.Println(line)
 	}
+	fmt.Println()
 }
 
 func labelWidth(rows []Row) int {
@@ -48,16 +45,4 @@ func labelWidth(rows []Row) int {
 		}
 	}
 	return width
-}
-
-func TypeString(s string) {
-	for _, char := range s {
-		fmt.Print(string(char))
-
-		min := 20
-		max := 130
-		delay := time.Duration(rand.Intn(max-min)+min) * time.Millisecond
-		time.Sleep(delay)
-	}
-	fmt.Print("\n")
 }
