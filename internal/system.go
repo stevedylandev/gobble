@@ -16,6 +16,16 @@ type Row struct {
 	Value string
 }
 
+// Create a new function that returns a row 
+//
+// func MyInfo() Row {
+// 		var myValue string
+//
+// 		// get the value here
+//
+// 		return Row{Key: "Foo", Value: myValue}
+// }
+
 func GetHostname() Row {
 	hostname, err := os.Hostname()
 	if err != nil {

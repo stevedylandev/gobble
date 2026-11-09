@@ -22,6 +22,7 @@ type Color struct {
 	Code string
 }
 
+// Palette can be edited or expanded
 var Palette = []Color{
 	{"Red", Red},
 	{"Green", Green},
@@ -33,8 +34,21 @@ var Palette = []Color{
 	{"Gray", Gray},
 }
 
+// Customize key color and swatch symbol
+const KeyColor = Yellow
+const PaletteSwatch = "●"
+
 func Colorize(color, s string) string {
 	return color + s + Reset
+}
+
+func PrintPalette() {
+	fmt.Print("  ")
+	for _, c := range Palette {
+		swatch := Colorize(c.Code, PaletteSwatch + "  ")
+		fmt.Print(swatch)
+	}
+	fmt.Println()
 }
 
 func PrintRows(rows []Row) {
@@ -42,7 +56,7 @@ func PrintRows(rows []Row) {
 
 	fmt.Println()
 	for _, row := range rows {
-		label := Colorize(Bold+Yellow, fmt.Sprintf("%-*s", width, row.Key))
+		label := Colorize(Bold+KeyColor, fmt.Sprintf("%-*s", width, row.Key))
 		line := "  " + label + "    " + row.Value
 
 		fmt.Println(line)
@@ -58,13 +72,4 @@ func labelWidth(rows []Row) int {
 		}
 	}
 	return width
-}
-
-func PrintPalette() {
-	fmt.Print("  ")
-	for _, c := range Palette {
-		swatch := Colorize(c.Code, "●  ")
-		fmt.Print(swatch)
-	}
-	fmt.Println()
 }

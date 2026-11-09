@@ -6,6 +6,7 @@ import (
 
 // Gobble: fetch in go for fun
 
+// Add or update a row in ./internal/system.go
 func main() {
 	rows := []system.Row {
 		system.GetHostname(),
