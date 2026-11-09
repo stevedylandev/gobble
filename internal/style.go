@@ -56,6 +56,9 @@ func PrintRows(rows []Row) {
 
 	fmt.Println()
 	for _, row := range rows {
+		if row.Value == "Unknown" {
+			continue
+		}
 		label := Colorize(Bold+KeyColor, fmt.Sprintf("%-*s", width, row.Key))
 		line := "  " + label + "    " + row.Value
 
