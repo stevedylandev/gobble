@@ -1,23 +1,23 @@
 package main
 
 import (
-	internal "github.com/stevedylandev/gobble/internal"
+	system "github.com/stevedylandev/gobble/internal"
 )
 
 // Gobble: fetch in go for fun
 
 func main() {
-	rows := []internal.Row {
-		internal.GetHostname(),
-		{"Machine", internal.GetMachine()},
-		{"Kernel", internal.GetKernel()},
-		{"Distro", internal.GetDistro()},
-		{"Packages", internal.GetPackages()},
-		{"Shell", internal.GetShell()},
-		{"CPU", internal.GetCpu()},
-		{"Memory", internal.GetMemory()},
-		{"Uptime", internal.GetUptime()},
+	rows := []system.Row {
+		system.GetHostname(),
+		system.GetMachine(),
+		system.GetKernel(),
+		system.GetDistro(),
+		system.GetPackages(),
+		system.GetShell(),
+		system.GetCpu(),
+		system.GetMemory(),
+		system.GetUptime(),
 	}
-	internal.PrintRows(rows, false)
+	system.PrintRows(rows, false)
 }
 
