@@ -16,6 +16,8 @@ type Row struct {
 	Value string
 }
 
+var debug bool = false
+
 // Create a new function that returns a row
 //
 // func MyInfo() Row {
@@ -29,10 +31,19 @@ type Row struct {
 func GetHostname() Row {
 	hostname, err := os.Hostname()
 	if err != nil {
-		hostname = "Unknown"
+		switch {
+		case debug:
+			fmt.Println("Problem fetching hostname:", err)
+			hostname = "Unknown"
+		default:
+			hostname = "Unknown"
+		}
 	}
 	user := os.Getenv("USER")
 	if user == "" {
+		if debug {
+			fmt.Println("Problem fetching user:", err)
+		}
 		user = "Unknown"
 	}
 	host := fmt.Sprintf("%s@%s", user, hostname)
@@ -43,6 +54,9 @@ func GetDistro() Row {
 	var distro string
 	file, err := os.Open("/etc/os-release")
 	if err != nil {
+		if debug {
+			fmt.Println("Problem fetching distro /etc/os-release:", err)
+		}
 		distro = "Unknown"
 	}
 	defer file.Close()
@@ -62,10 +76,16 @@ func GetMachine() Row {
 	var machine string
 	brandFile, err := os.ReadFile("/sys/class/dmi/id/sys_vendor")
 	if err != nil {
+		if debug {
+			fmt.Println("Problem fetching machine /sys/class/dmi/id/sys_vendor:", err)
+		}
 		machine = "Unknown"
 	}
 	productFile, err := os.ReadFile("/sys/class/dmi/id/product_name")
 	if err != nil {
+		if debug {
+			fmt.Println("Problem fetching machine /sys/class/dmi/id/product_name:", err)
+		}
 		machine = "Unknown"
 	}
 
@@ -80,6 +100,9 @@ func GetKernel() Row {
 	var kernel string
 	kernelFile, err := os.ReadFile("/proc/sys/kernel/osrelease")
 	if err != nil {
+		if debug {
+			fmt.Println("Problem fetching kernal /proc/sys/kernal/osrelease:", err)
+		}
 		kernel = "Unknown"
 	}
 	kernel = strings.TrimSpace(string(kernelFile))
@@ -91,6 +114,9 @@ func GetPackages() Row {
 	var count int
 	file, err := os.Open("/lib/apk/db/installed")
 	if err != nil {
+		if debug {
+			fmt.Println("Problem fetching packages /lib/apk/db/installed:", err)
+		}
 		packages = "Unknown"
 	}
 	defer file.Close()
@@ -112,6 +138,9 @@ func GetDe() Row {
 	var de string
 	de = os.Getenv("DESKTOP_SESSION")
 	if de == "" {
+		if debug {
+			fmt.Println("Problem fetching DESKTOP_SESSION:", de)
+		}
 		de = "Unknown"
 	}
 	return Row{Key: "DE", Value: de}
@@ -121,7 +150,13 @@ func GetShell() Row {
 	var shell string
 	shellEnv := os.Getenv("SHELL")
 	if shellEnv == "" {
-		shell = "Unknown"
+		switch {
+		case debug:
+			fmt.Println("Problem fetching SHELL:", shellEnv)
+			shell = "Unknown"
+		default:
+			shell = "Unknown"
+		}
 	}
 
 	shell = filepath.Base(shellEnv)
@@ -133,6 +168,9 @@ func GetCpu() Row {
 	var cpu string
 	file, err := os.Open("/proc/cpuinfo")
 	if err != nil {
+		if debug {
+			fmt.Println("Problem fetching CPU /proc/cpuinfo:", err)
+		}
 		cpu = "Unknown"
 	}
 	defer file.Close()
@@ -155,6 +193,9 @@ func GetMemory() Row {
 	var memAvailable string
 	file, err := os.Open("/proc/meminfo")
 	if err != nil {
+		if debug {
+			fmt.Println("Problem fetching memory /proc/meminfo:", err)
+		}
 		memory = "Unknown"
 	}
 	defer file.Close()
