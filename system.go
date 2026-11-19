@@ -1,4 +1,4 @@
-package internal
+package main
 
 import (
 	"bufio"
@@ -16,7 +16,7 @@ type Row struct {
 	Value string
 }
 
-// Create a new function that returns a row 
+// Create a new function that returns a row
 //
 // func MyInfo() Row {
 // 		var myValue string

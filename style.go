@@ -1,4 +1,4 @@
-package internal
+package main
 
 import (
 	"fmt"
@@ -35,8 +35,10 @@ var Palette = []Color{
 }
 
 // Customize key color and swatch symbol
-const KeyColor = Yellow
-const PaletteSwatch = "●"
+const (
+	KeyColor      = Yellow
+	PaletteSwatch = "●"
+)
 
 func Colorize(color, s string) string {
 	return color + s + Reset
@@ -45,7 +47,7 @@ func Colorize(color, s string) string {
 func PrintPalette() {
 	fmt.Print("  ")
 	for _, c := range Palette {
-		swatch := Colorize(c.Code, PaletteSwatch + "  ")
+		swatch := Colorize(c.Code, PaletteSwatch+"  ")
 		fmt.Print(swatch)
 	}
 	fmt.Println()
