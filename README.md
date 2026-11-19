@@ -24,7 +24,8 @@ go install .
 3. Run and Debug
 
 ```bash
-gobble
+gobble          # regular output
+gobble debug    # prints errors
 ```
 
 This program likely won't work for your system out of the box. Run it, figure out the issue, and fix it. 
