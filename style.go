@@ -24,6 +24,7 @@ type Color struct {
 
 // Palette can be edited or expanded
 var Palette = []Color{
+	{"Gray", Gray},
 	{"Red", Red},
 	{"Green", Green},
 	{"Yellow", Yellow},
@@ -31,7 +32,6 @@ var Palette = []Color{
 	{"Magenta", Magenta},
 	{"Cyan", Cyan},
 	{"White", White},
-	{"Gray", Gray},
 }
 
 // Customize key color and swatch symbol
